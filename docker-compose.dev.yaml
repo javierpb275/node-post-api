@@ -1,0 +1,41 @@
+version: '3.8'
+services:
+  mysql_db:
+    image: mysql:5.7
+    container_name: mysql_db
+    env_file:
+      - ./src/config/dev.env
+    ports:
+      - "6033:3306"
+    volumes:
+      - dbdata:/var/lib/mysql
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: pma
+    depends_on:
+      - mysql_db
+    environment:
+      PMA_HOST: mysql_db
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+    restart: always
+    ports:
+      - 8081:80
+  node_post_api:
+    build: 
+      context: .
+      target: development
+    container_name: node_post_api
+    env_file:
+      - ./src/config/dev.env
+    volumes:
+      - ./:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - 4000:4000
+    command: npm run dev
+    depends_on:
+      - mysql_db
+
+volumes:
+  dbdata:

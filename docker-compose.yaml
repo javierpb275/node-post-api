@@ -1,0 +1,11 @@
+version: '3.8'
+services:
+  node_post_api:
+    build: 
+      context: .
+      target: production
+    env_file:
+      - ./src/config/prod.env
+    ports:
+      - 4000:4000
+      
