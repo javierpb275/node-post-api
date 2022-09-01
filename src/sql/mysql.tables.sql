@@ -1,3 +1,4 @@
+CREATE DATABASE post_db;
 
 CREATE TABLE `post_db`.`users` (
     `user_id` INT NOT NULL AUTO_INCREMENT , 
@@ -23,3 +24,8 @@ CREATE TABLE `post_db`.`posts` (
     ON DELETE CASCADE
 ) ENGINE = InnoDB;
 
+INSERT INTO `users`(`user_id`, `username`, `email`, `password`, `avatar`) VALUES (1, 'pepe', 'pepe@gmail.com', 'Abc123..', NULL);
+INSERT INTO `users`(`user_id`, `username`, `email`, `password`, `avatar`) VALUES (2, 'maria', 'maria@gmail.com', 'Abc123..', NULL);
+
+INSERT INTO `posts`(`post_id`, `title`, `description`, `post_image`, `user_id`) VALUES (1, 'post 1', NULL, NULL, 1);
+INSERT INTO `posts`(`post_id`, `title`, `description`, `post_image`, `user_id`) VALUES (2, 'post 2', NULL, NULL, 2);
