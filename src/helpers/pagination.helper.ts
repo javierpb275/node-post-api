@@ -32,6 +32,9 @@ export const paginator = (queryObject: any): string => {
       if (counter > 0) {
         filtering += ` AND`;
       }
+      if (typeof value === "string") {
+        value = `'${value}'`
+      }
       filtering += ` ${key} = ${value}`;
       counter++;
     });
