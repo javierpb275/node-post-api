@@ -7,6 +7,7 @@ import {
   generateToken,
   hashPassword,
 } from "../helpers/authentication.helper";
+import { paginator } from "../helpers/pagination.helper";
 import {
   isCorrectEmail,
   isSecurePassword,
@@ -393,7 +394,10 @@ export default class UserController {
   ): Promise<Response> {
     try {
       const conn = await connect();
-      const response: any[] = await conn.query(`SELECT user_id, username, email, avatar FROM users`);
+      const response: any[] = await conn.query(
+        `SELECT user_id, username, email, avatar FROM users` +
+          paginator(req.query)
+      );
       const users: UserModel[] = response[0];
       let message: string;
       if (!users.length) {

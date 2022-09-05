@@ -1,5 +1,6 @@
 import { Response } from "express";
 import { connect } from "../db/mysql.connection";
+import { paginator } from "../helpers/pagination.helper";
 import { validateObjectProperties } from "../helpers/validation.helper";
 import { CRequest } from "../middlewares/auth.middleware";
 import { PostModel } from "../models/post.model";
@@ -206,7 +207,9 @@ export default class PostController {
   ): Promise<Response> {
     try {
       const conn = await connect();
-      const response: any[] = await conn.query(`SELECT * FROM posts`);
+      const response: any[] = await conn.query(
+        `SELECT * FROM posts` + paginator(req.query)
+      );
       const posts: PostModel[] = response[0];
       let message: string;
       if (!posts.length) {
