@@ -356,4 +356,63 @@ export default class UserController {
       });
     }
   }
+  public static async getUserById(
+    req: CRequest,
+    res: Response
+  ): Promise<Response> {
+    const { params } = req;
+    try {
+      const conn = await connect();
+      const response: any[] = await conn.query(
+        `SELECT user_id, username, email, avatar FROM users WHERE user_id = ?`,
+        [params.id]
+      );
+      const users: UserModel[] = response[0];
+      if (!users.length) {
+        return res
+          .status(404)
+          .send({ error: true, data: { message: "User Not Found." } });
+      }
+      return res.status(200).send({
+        error: false,
+        data: {
+          message: "User found successfully.",
+          user: users[0],
+        },
+      });
+    } catch (err) {
+      return res.status(500).send({
+        error: true,
+        data: { message: "Unable to get user.", error: err },
+      });
+    }
+  }
+  public static async getUsers(
+    req: CRequest,
+    res: Response
+  ): Promise<Response> {
+    try {
+      const conn = await connect();
+      const response: any[] = await conn.query(`SELECT user_id, username, email, avatar FROM users`);
+      const users: UserModel[] = response[0];
+      let message: string;
+      if (!users.length) {
+        message = "No users found.";
+      } else {
+        message = `Found ${users.length} users`;
+      }
+      return res.status(200).send({
+        error: false,
+        data: {
+          message,
+          users: users,
+        },
+      });
+    } catch (err) {
+      return res.status(500).send({
+        error: true,
+        data: { message: "Unable to get users.", error: err },
+      });
+    }
+  }
 }
